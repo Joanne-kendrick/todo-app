@@ -13,4 +13,6 @@ document.addEventListener('DOMContentLoaded', function () {
             input.value = ''; // Clear input after adding task
         }
     });
+    
+    
 });

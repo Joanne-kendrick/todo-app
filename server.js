@@ -1,10 +1,11 @@
 const express = require('express');
 const os = require('os');
-const path = require('path');
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
+app.use(express.json()); // To handle JSON data
 
 function getIPAddress() {
     const networkInterfaces = os.networkInterfaces();
@@ -18,16 +19,16 @@ function getIPAddress() {
     return 'IP not found'; // In case no IP address is found
 }
 
-// Route to show the IP address of the instance
 app.get('/', (req, res) => {
     const instanceIP = getIPAddress();
-
-    res.sendFile(path.join(__dirname, 'public', 'index.html'),{
-        headers: {'X-Instance-IP': instanceIP }
-    }) ;
+    res.sendFile(__dirname + '/public/index.html');
 });
 
-const PORT = process.env.PORT || 3000;
+app.get('/ip', (req, res) => {
+    const instanceIP = getIPAddress();
+    res.send(instanceIP);
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
