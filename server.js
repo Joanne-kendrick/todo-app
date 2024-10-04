@@ -1,7 +1,10 @@
 const express = require('express');
 const os = require('os');
+const path = require('path');
 
 const app = express();
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 function getIPAddress() {
     const networkInterfaces = os.networkInterfaces();
@@ -18,18 +21,13 @@ function getIPAddress() {
 // Route to show the IP address of the instance
 app.get('/', (req, res) => {
     const instanceIP = getIPAddress();
-    res.send(`<h1>Welcome to the Todo App</h1><p>Instance IP Address: ${instanceIP}</p>`);
+
+    res.sendFile(path.join(__dirname, 'public', 'index.html'),{
+        headers: {'X-Instance-IP': instanceIP }
+    }) ;
 });
 
 const PORT = process.env.PORT || 3000;
-
-app.use(express.static('public'));
-app.use(express.json()); // To handle JSON data
-
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
-});
-
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
