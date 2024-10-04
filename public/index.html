@@ -7,6 +7,24 @@
 </head>
 <body>
     <h1>To-Do List</h1>
+
+    <div>
+        <p>Instance IP Address: <span id="instance-ip"></span></p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Fetch the instance IP from the response headers
+            const instanceIP = document.querySelector('span#instance-ip');
+            fetch(window.location.href)
+                .then(response => {
+                    const ipAddress = response.headers.get('X-Instance-IP');
+                    instanceIP.textContent = ipAddress || 'IP not found';
+                });
+        });
+    </script>
+
+    
     <form id="todo-form">
         <input type="text" id="todo-input" placeholder="Enter a task" required>
         <button type="submit">Add Task</button>
